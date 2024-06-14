@@ -120,14 +120,24 @@ def display_form():
 if __name__ == '__main__':
     display_form()
 
-    final_prediction = st.session_state['prediction']
+    final_prediction = st.session_state['prediction'][0]
+    probablity_of_yes = st.session_state['probability'][0][1]
+    probablity_of_no = st.session_state['probability'][0][0]
 
     if not final_prediction:
         st.write('### Predictions shows here!')
         st.divider()
     else:
-        st.write(f'## {final_prediction}')
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write(f'### Prediction: {final_prediction}')
+        with col2:
+            if final_prediction == 'No':
+                st.write(f'### Probability: {round(probablity_of_no, 2)}')
+            else:
+                st.write(f'### Probability: {round(probablity_of_yes, 2)}')
 
+    st.divider()
 
     st.write(st.session_state)
 
