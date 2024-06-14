@@ -1,0 +1,46 @@
+   st.markdown(
+            f"""
+            <div style="background-color: #CCE5FF; border-radius: 10px; width: 80%; margin-top: 20px;" >
+                <h3 style="margin-left: 30px">Quick Stats About Dataset</h3>
+                <hr>
+                <h5 style="margin-left: 30px"> Attrition Rate: {(df['Attrition'].value_counts(normalize=True).get('Yes', 0) * 100):.2f}%.</h5>
+                <hr>
+                <h5 style="margin-left: 30px">Average Monthly Income: ${df['MonthlyIncome'].mean():.2f}</h5>
+                <hr>
+                <h5 style="margin-left: 30px">Data Size: {df.size}</h5>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+credentials:
+  usernames:
+    coderacheal:
+      email: coderacheal@gmail.com
+      logged_in: False # Will be managed automatically
+      name: Racheal Appiah-kubi
+      password: '123456' # Will be hashed automatically
+cookie:
+  expiry_days: 0
+  key: cookie_signature_key # Must be string
+  name: cookie_name
+preauthorized:
+  emails:
+  - racheal.appiahkubi@azubiafrica.org
+users:
+
+from yaml.loader import SafeLoader
+with open('./config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
+
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days'],
+    config['preauthorized']
+)
+
+
+name, authentication_status, username = authenticator.login(location='sidebar')
