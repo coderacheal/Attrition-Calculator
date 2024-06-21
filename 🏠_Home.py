@@ -2,9 +2,8 @@ import streamlit as st
 
 
 st.set_page_config(
-    page_title='Home Page',
-    page_icon='🏠',
-    layout='wide'
+    page_title='About',
+    layout='wide',
+    page_icon='🏠'
 )
 
-st.title("Attrition Calculator!")
