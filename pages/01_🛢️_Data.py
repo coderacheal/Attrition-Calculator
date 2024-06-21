@@ -1,5 +1,4 @@
 import streamlit as st
-import pyodbc
 import pandas as pd
 
 
@@ -9,44 +8,19 @@ st.set_page_config(
     layout='wide'
 )
 
-st.title('IBM Attrition Database 🛢️')
 
-# Create a connection to database 
-# query the database 
-
-
-@st.cache_resource(show_spinner='Connecting to Database 🗃️...')
-def init_connection():
-    return pyodbc.connect(
-        "DRIVER={SQL Server};SERVER="
-        + st.secrets["server"]
-        + ";DATABASE="
-        + st.secrets["database"]
-        + ";UID="
-        + st.secrets["username"]
-        + ";PWD="
-        + st.secrets["password"]
-    )
-
-
-connection = init_connection()
-
-@st.cache_data(show_spinner='running_query...')
-def running_query(query):
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        df = pd.DataFrame.from_records(rows, columns=[column[0] for column in cursor.description])
+def show_datafram():
+    data = pd.read_csv('./data/attrition.csv')
+    df = st.dataframe(data)
     return df
 
 
+if st.session_state['authentication_status']:
+    st.title('IBM Attrition Database 🛢️')
+    st.selectbox('', placeholder='Select  column type', options=['All columns', 'Numerical Columns', 'Categorical Columns'])
+    show_datafram()
+elif st.session_state['authentication_status'] is False:
+    st.error('Wrong username/password')
+elif st.session_state['authentication_status'] is None:
+    st.info('Login to get access to the app from the home page')
 
-def get_all_column():
-    sql_query = " SELECT * FROM LP2_Telco_churn_first_3000 "
-    df = running_query(sql_query)
-    return df
-
-
-st.write(get_all_column())
-
-st.selectbox('Select..', options=['All columns', 'Numerical Columns', 'Categorical Columns'], on_change=get_all_column)

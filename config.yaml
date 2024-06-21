@@ -1,0 +1,15 @@
+credentials:
+  usernames:
+    coderacheal:
+      email: coderacheal@gmail.com
+      logged_in: False # Will be managed automatically
+      name: Racheal Appiah-kubi
+      password: '123456' # Will be hashed automatically
+cookie:
+  expiry_days: 0
+  key: cookie_signature_key # Must be string
+  name: cookie_name
+pre-authorized:
+  emails:
+  - racheal.appiahkubi@azubiafrica.org
+users:
