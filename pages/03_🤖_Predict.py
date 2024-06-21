@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
+import datetime
 
 
 st.set_page_config(
@@ -77,6 +79,23 @@ def make_prediction(pipeline, encoder):
     st.session_state['prediction'] = prediction
     st.session_state['probability'] = probability
 
+    # probablity_of_yes = st.session_state['probability'][0][1]
+    # probablity_of_no = st.session_state['probability'][0][0]
+
+    if prediction == 'No':
+        st.session_state['probability'] = probability[0][0]
+    else:
+        st.session_state['probability'] = probability[0][1]
+
+
+    df['prediction'] = prediction
+    df['probability'] = probability[0][0]
+    df['time_of_prediction'] = datetime.date.today()
+    df['model_used'] = st.session_state['selected_model']
+
+    # Save dataframe to CSV as historics data
+    df.to_csv('./data/history.csv', mode='a', header=not os.path.exists('./data/history.csv'))
+
     return prediction, probability
 
 
@@ -120,9 +139,10 @@ def display_form():
 if __name__ == '__main__':
     display_form()
 
-    final_prediction = st.session_state['prediction'][0]
-    probablity_of_yes = st.session_state['probability'][0][1]
-    probablity_of_no = st.session_state['probability'][0][0]
+    if st.session_state['prediction'] != None:
+        final_prediction = st.session_state['prediction'][0]
+        probablity_of_yes = st.session_state['probability'][0][1]
+        probablity_of_no = st.session_state['probability'][0][0]
 
     if not final_prediction:
         st.write('### Predictions shows here!')
